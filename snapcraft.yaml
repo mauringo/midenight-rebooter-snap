@@ -1,0 +1,50 @@
+name: midnight-rebooter
+version: '0.1'
+base: core18
+summary: Simple reboot feature
+description: |
+     Want to reboot your device at midnight? you're in the right place!
+      
+confinement: strict
+grade: stable
+
+    
+apps:
+
+ 
+  rebooter: 
+    command: sh $SNAP/bin/runserver.sh  
+    plugs:
+      - network-control
+      - network-observe
+      - network
+      - shutdown
+    daemon: simple 
+    
+
+
+parts:
+
+  flask:
+    plugin: python
+    python-version: python3
+    python-packages: [schedule]
+    build-packages:
+      - python3-dev
+      - build-essential
+      
+  
+
+  python-code:  
+    source: ./code/
+    plugin: dump
+    organize:
+      '*': bin/Flask/
+
+  shscripts:  
+    source: ./shscripts/
+    plugin: dump
+    organize:
+      '*': bin/
+
+
